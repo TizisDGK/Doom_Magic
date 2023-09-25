@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float forwardForce = 700;
     [SerializeField] float sideForce = 700;
     [SerializeField] float speedUp;
+    [SerializeField] float sensitivity = 1;
     
 
     Rigidbody rb;
@@ -23,7 +24,12 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
-   
+    private void Update()
+    {
+       
+    }
+
+
     // Update is called once per frame
     private void FixedUpdate()
     {
@@ -31,23 +37,28 @@ public class PlayerController : MonoBehaviour
         {
             forwardForce = forwardForce + speedUp;
             sideForce = sideForce + speedUp;
-            Debug.Log("split");
         }
         else
         {
             forwardForce = 700;
             sideForce = 700;
-            Debug.Log("dont split");
         }
+
+        float xMouseMovement = Input.GetAxis("Mouse X");
+        
 
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 
-        rb.AddForce(new Vector3(horizontal * Time.fixedDeltaTime * forwardForce, 0, vertical * Time.fixedDeltaTime * sideForce));
+        Vector3 force = Vector3.zero;
+        force += transform.forward * vertical* Time.fixedDeltaTime * forwardForce;
+        force += transform.right * horizontal * Time.fixedDeltaTime * sideForce;
 
-        
+        float rotation = xMouseMovement * sensitivity * Time.deltaTime;
+
+        rb.AddForce(force);
+        transform.Rotate(0, rotation, 0);
+        //rb.AddForce(new Vector3(horizontal * Time.fixedDeltaTime * forwardForce, 0, vertical * Time.fixedDeltaTime * sideForce));
 
     }
-
-    
 }
