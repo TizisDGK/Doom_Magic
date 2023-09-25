@@ -412,6 +412,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   forwardForce: 700
   sideForce: 700
+  speedUp: 200
 --- !u!54 &1851701916
 Rigidbody:
   m_ObjectHideFlags: 0
