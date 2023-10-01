@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DamagableComponent : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class DamagableComponent : MonoBehaviour
 
     int currentHp;
     bool isDead;
+
+    [SerializeField] Text countHp;
 
     private void Start()
     {
@@ -38,4 +41,35 @@ public class DamagableComponent : MonoBehaviour
         Debug.Log($"{gameObject.name} is dead");
         isDead = true;
     }
+
+    private void Update()
+    {
+        countHp.text = currentHp.ToString() + " / " + hp.ToString();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("lava"))
+        {
+            if(currentHp != 0)
+            {
+                currentHp -= 10;
+                Debug.Log("damage");
+            }
+            else
+            {
+                Die();
+            }
+            
+        }
+        else if (other.gameObject.CompareTag("hill"))
+        {
+            if (currentHp != 100)
+            {
+                currentHp += 5;
+                Debug.Log("hill");
+            }
+        }
+    }
+
 }
