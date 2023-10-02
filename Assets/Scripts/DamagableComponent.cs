@@ -42,6 +42,16 @@ public class DamagableComponent : MonoBehaviour
         isDead = true;
     }
 
+    private void OnEnable()
+    {
+        EnemyManager.RegisterEnemy(this);
+    }
+
+    private void OnDisable()
+    {
+        EnemyManager.UnregisterEnemy(this);
+    }
+
     private void Update()
     {
         countHp.text = currentHp.ToString() + " / " + hp.ToString();
