@@ -40,6 +40,16 @@ public class DamagableComponent : MonoBehaviour
         isDead = true;
     }
 
+    private void OnEnable()
+    {
+        EnemyManager.RegisterEnemy(this);
+    }
+
+    private void OnDisable()
+    {
+        EnemyManager.UnregisterEnemy(this);
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Heal"))
