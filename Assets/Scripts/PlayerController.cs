@@ -2,16 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
+[RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] float forwardForce = 700;
-    [SerializeField] float sideForce = 700;
-    [SerializeField] float speedUp;
+    //[SerializeField] float forwardForce = 700;
+    //[SerializeField] float sideForce = 700;
+    [SerializeField] float speed = 10;
     [SerializeField] float sensitivity = 1;
-    
 
-    Rigidbody rb;
+
+    [SerializeField] float speedUp;
+
+    Vector3 surfaceNormal;
+
+    CharacterController characterController;
+
+    float verticalSpeed;
 
     // Start is called before the first frame update
     private void Start()
@@ -21,15 +27,71 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        rb = GetComponent<Rigidbody>();
+        characterController = GetComponent<CharacterController>();
     }
 
-    
 
+    private void Update()
+    {
+        float xMouseMovement = Input.GetAxis("Mouse X");
+        float horizontal = Input.GetAxis("Horizontal");
+        float vertical = Input.GetAxis("Vertical");
+
+        Vector3 moveDirection = new Vector3(horizontal, 0, vertical); //получили позицию в мировых координатах
+
+        moveDirection = Vector3.ClampMagnitude(moveDirection, 1); //метод позволяющий не выйти за пределы. Мы указали предел 1
+        moveDirection = transform.TransformDirection(moveDirection);
+        moveDirection = Vector3.ProjectOnPlane(moveDirection, surfaceNormal);
+        //moveDirection = transform.TransformDirection(moveDirection) * speed; //приведение к локальным координатам с помощью Transform Direction
+
+        Debug.DrawLine(transform.position, transform.position + moveDirection * 2, Color.blue);
+
+        transform.Rotate(new Vector3(0, xMouseMovement * sensitivity * Time.deltaTime, 0));
+
+        
+
+        if (characterController.isGrounded)
+        {
+            verticalSpeed = 0;
+            //Vector3 velocity = characterController.velocity;
+           // verticalMovement = velocity.y - 9.8f * Time.deltaTime;
+        }
+        else
+        {
+            verticalSpeed -= 9.8f * Time.deltaTime;
+        }
+
+        characterController.Move((moveDirection * speed + Vector3.up * verticalSpeed) * Time.deltaTime);
+        
+        /*
+        if (characterController.SimpleMove(moveDirection))
+        {
+            if (Physics.Raycast(transform.position, -transform.up, out RaycastHit hit, 2 ))
+            {
+                transform.position = hit.point + transform.up * (characterController.height / 2);
+            }
+
+        }*/
+
+        //characterController.SimpleMove(moveDirection);
+
+        
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+
+        Debug.DrawLine(hit.point, hit.point + hit.normal * 10, Color.red);
+        //Debug.DrawLine(transform.position, transform.position + hit.normal, Color.green);
+
+        surfaceNormal = hit.normal;
+        print(hit.collider.name);
+    }
 
     // Update is called once per frame
-    private void FixedUpdate()
+    /*private void FixedUpdate()
     {
+        
         if (Input.GetKey(KeyCode.LeftShift))
         {
             forwardForce = forwardForce + speedUp;
@@ -40,14 +102,13 @@ public class PlayerController : MonoBehaviour
             forwardForce = 700;
             sideForce = 700;
         }
-
-        float xMouseMovement = Input.GetAxis("Mouse X");
         
 
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
+    // float xMouseMovement = Input.GetAxis("Mouse X");
+    // float horizontal = Input.GetAxis("Horizontal");
+    // float vertical = Input.GetAxis("Vertical");
 
-        Vector3 force = Vector3.zero;
+    Vector3 force = Vector3.zero;
         force += transform.forward * vertical* Time.fixedDeltaTime * forwardForce;
         force += transform.right * horizontal * Time.fixedDeltaTime * sideForce;
 
@@ -57,5 +118,5 @@ public class PlayerController : MonoBehaviour
         transform.Rotate(0, rotation, 0);
         //rb.AddForce(new Vector3(horizontal * Time.fixedDeltaTime * forwardForce, 0, vertical * Time.fixedDeltaTime * sideForce));
 
-    }
+    }*/
 }
