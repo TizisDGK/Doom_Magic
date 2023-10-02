@@ -67,6 +67,7 @@ public class DamagableComponent : MonoBehaviour
             if (currentHp != 100)
             {
                 currentHp += 5;
+                Destroy(other.gameObject);
                 Debug.Log("hill");
             }
         }
