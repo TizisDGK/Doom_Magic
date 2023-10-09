@@ -57,9 +57,7 @@ public class DamagableComponent : MonoBehaviour
             currentHp += 20;
             Destroy(other.gameObject);
             if (currentHp > hp)
-            {
                 currentHp = hp;
-            }
             Debug.Log($"{currentHp} current HP");
         }
     }
