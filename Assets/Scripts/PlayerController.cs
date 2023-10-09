@@ -33,6 +33,29 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        Vector3 rotation = new Vector3(0, Input.GetAxis("Mouse X") * sensitivity * Time.deltaTime);
+
+        transform.Rotate(rotation);
+
+        if (characterController.isGrounded) verticalSpeed = -0.1f;
+        else verticalSpeed += Physics.gravity.y * Time.deltaTime;
+
+        Vector3 input = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        input = Vector3.ClampMagnitude(input, 1);
+
+        Vector3 velocity = transform.TransformDirection(input) * speed;
+
+        Quaternion slopeRotation = Quaternion.FromToRotation(Vector3.up, surfaceNormal);
+        Vector3 adjustedVelocity = slopeRotation * velocity;
+
+        velocity = adjustedVelocity.y < 0 ? adjustedVelocity : velocity;
+
+
+        velocity.y += verticalSpeed;
+
+        characterController.Move(velocity * Time.deltaTime);
+        
+        /*
         float xMouseMovement = Input.GetAxis("Mouse X");
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
@@ -74,7 +97,7 @@ public class PlayerController : MonoBehaviour
         }*/
 
         //characterController.SimpleMove(moveDirection);
-
+        
         
     }
 
