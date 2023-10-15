@@ -54,7 +54,7 @@ public class DamagableComponent : MonoBehaviour
 
     private void Update()
     {
-        countHp.text = currentHp.ToString() + " / " + hp.ToString();
+//        countHp.text = currentHp.ToString() + " / " + hp.ToString();
     }
 
     private void OnTriggerEnter(Collider other)
