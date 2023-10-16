@@ -40,4 +40,20 @@ public class Lava : MonoBehaviour
             Debug.Log($"{damagableComponent.Hp} current HP");
         }
     }
+
+    void OnCharacterStay(PlayerController controller)
+    {
+        print($"Lava Player Stay: {controller.name}");
+    }
+
+    void OnCharacterEnter()
+    {
+        print("Lava Player Enter");
+    }
+
+    void OnCharacterExit()
+    {
+        print("Lava Player Exit");
+    }
 }
+

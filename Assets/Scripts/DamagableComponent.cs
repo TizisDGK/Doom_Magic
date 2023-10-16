@@ -52,8 +52,11 @@ public class DamagableComponent : MonoBehaviour
         EnemyManager.UnregisterEnemy(this);
     }
 
-    private void Update()
+    /*private void Update()
     {
        countHp.text = currentHp.ToString() + " / " + hp.ToString();
-    }
+    }*/
+
+
+    
 }

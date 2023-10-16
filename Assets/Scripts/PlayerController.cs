@@ -11,6 +11,25 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] float speedUp;
 
+
+    GameObject floor;
+    GameObject Floor
+    {
+        get => floor;
+        set //вызывается только когда присваивается объект
+        {
+            if(floor != value) // проверяем равно ли старое значение новому (проверка изменился ли пол
+            {
+                if(floor != null) //вызываем у старого пола экзит -- то есть мы с него ушли
+                    floor.SendMessage("OnCharacterExit", this, SendMessageOptions.DontRequireReceiver);
+
+                if(value != null) // вызываем у нового пола  энтер -- то есть мы в него вошли
+                    value.SendMessage("OnCharacterEnter", this, SendMessageOptions.DontRequireReceiver);
+            }
+            floor = value;
+        }
+    }
+
     Vector3 surfaceNormal;
 
     CharacterController characterController;
@@ -25,6 +44,9 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
+
+        Cursor.lockState = CursorLockMode.Locked; //заблокировали курсор
+        Cursor.visible = false; //сделали курсор невиидимым
     }
 
 
@@ -51,6 +73,9 @@ public class PlayerController : MonoBehaviour
         velocity.y += verticalSpeed;
 
         characterController.Move(velocity * Time.deltaTime);
+
+
+        GroundCheck(); //проверяем на чем стоим
         
     }
 
@@ -62,4 +87,23 @@ public class PlayerController : MonoBehaviour
         surfaceNormal = hit.normal;
         print(hit.collider.name);
     }
+
+
+    void GroundCheck() //берем физику из позиции персонада, выпускаем луч и проверяем что под персонажем
+    {
+        if (Physics.Linecast(transform.position, transform.position + Vector3.down * (characterController.height / 2 + 0.1f), out RaycastHit hit))
+        {
+            //если попали во что-то, то:
+
+            Floor = hit.collider.gameObject; //мы выбираем пол на который попал луч
+            Floor.SendMessage("OnCharacterStay", this, SendMessageOptions.DontRequireReceiver); // вызываем каждый кадр пока стоим на полу, что мы все еще стоим на полу 
+            //сенд мессндж можно вызвать только у геймобджекта
+        }
+        else
+        {
+            Floor = null;
+        }
+
+    }
+
 }
