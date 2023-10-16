@@ -9,7 +9,7 @@ public class HealingItem : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponent<CharacterController>())
+        if (other.gameObject.TryGetComponent<DamagableComponent>(out DamagableComponent hinge))
         {
             damagableComponent = other.gameObject.GetComponent<DamagableComponent>();
             damagableComponent.Hp += heal;

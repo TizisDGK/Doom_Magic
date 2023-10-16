@@ -36,7 +36,7 @@ public class MovingPlatform : MonoBehaviour
                 i--;
         }
 
-        transform.position = Vector3.MoveTowards(transform.position, points[i].position, moveSpeed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, points[i].position, moveSpeed * Time.fixedDeltaTime);
     }
 
     private void OnTriggerEnter(Collider other)
