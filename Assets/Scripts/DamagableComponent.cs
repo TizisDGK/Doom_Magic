@@ -54,33 +54,6 @@ public class DamagableComponent : MonoBehaviour
 
     private void Update()
     {
-//        countHp.text = currentHp.ToString() + " / " + hp.ToString();
+       countHp.text = currentHp.ToString() + " / " + hp.ToString();
     }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("lava"))
-        {
-            if(currentHp != 0)
-            {
-                currentHp -= 10;
-                Debug.Log("damage");
-            }
-            else
-            {
-                Die();
-            }
-            
-        }
-        else if (other.gameObject.CompareTag("hill"))
-        {
-            if (currentHp != 100)
-            {
-                currentHp += 5;
-                Destroy(other.gameObject);
-                Debug.Log("hill");
-            }
-        }
-    }
-
 }

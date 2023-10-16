@@ -62,20 +62,4 @@ public class PlayerController : MonoBehaviour
         surfaceNormal = hit.normal;
         print(hit.collider.name);
     }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.GetComponent<MovingPlatform>())
-        {
-            this.transform.parent = collision.transform; //двигаемся вместе с платформой
-        }
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.GetComponent<MovingPlatform>())
-        {
-            this.transform.parent = null;
-        }
-    }
 }

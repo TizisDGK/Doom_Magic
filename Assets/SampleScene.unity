@@ -1134,6 +1134,7 @@ GameObject:
   - component: {fileID: 597140846}
   - component: {fileID: 597140845}
   - component: {fileID: 597140844}
+  - component: {fileID: 597140848}
   m_Layer: 0
   m_Name: hillObject
   m_TagString: hill
@@ -1217,6 +1218,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &597140848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 597140843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89f76f16ece194528a82eb749d32ef66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  heal: 20
 --- !u!1 &658728410
 GameObject:
   m_ObjectHideFlags: 0
@@ -1532,6 +1546,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1018288753 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3274879637727981187, guid: 475c61d57d5654c30a6e050cd4078462, type: 3}
+  m_PrefabInstance: {fileID: 3274879636348146718}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fbf785cdf61e47b58bcd65a7f150e88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1070577100
 GameObject:
   m_ObjectHideFlags: 0
@@ -3055,6 +3080,7 @@ GameObject:
   - component: {fileID: 2113805821}
   - component: {fileID: 2113805820}
   - component: {fileID: 2113805824}
+  - component: {fileID: 2113805825}
   m_Layer: 0
   m_Name: lavaPlane
   m_TagString: lava
@@ -3152,6 +3178,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 9.999999, y: 2.220446e-16, z: 10}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2113805825
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2113805819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1f1770cf6dcf4cf58609a4fe4dd9cbc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageAmount: 10
+  damagableComponent: {fileID: 1018288753}
 --- !u!1001 &3274879636348146718
 PrefabInstance:
   m_ObjectHideFlags: 0

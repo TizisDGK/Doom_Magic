@@ -8,7 +8,8 @@ public class MovingPlatform : MonoBehaviour
     bool movingUp = true;
     bool canMove;
 
-    void Update()
+   
+    void FixedUpdate()
     {
         if (canMove) //если стоит на платформе она двигается вверх-вниз
         {
@@ -23,18 +24,18 @@ public class MovingPlatform : MonoBehaviour
 
             if (movingUp)
             {
-                transform.position = new Vector3(transform.position.x, transform.position.y + speedMove * Time.deltaTime, transform.position.z);
+                transform.position = new Vector3(transform.position.x, transform.position.y + speedMove * Time.fixedDeltaTime, transform.position.z);
             }
             else
             {
-                transform.position = new Vector3(transform.position.x, transform.position.y - speedMove * Time.deltaTime, transform.position.z);
+                transform.position = new Vector3(transform.position.x, transform.position.y - speedMove * Time.fixedDeltaTime, transform.position.z);
             }
         }
         else //если не стоим на платформе, она опускается обратно вниз
         {
             if(transform.position.y > -7f && transform.position.y != -7f)
             {
-                transform.position = new Vector3(transform.position.x, transform.position.y - speedMove * Time.deltaTime, transform.position.z);
+                transform.position = new Vector3(transform.position.x, transform.position.y - speedMove * Time.fixedDeltaTime, transform.position.z);
             }
         }
     }
@@ -42,10 +43,12 @@ public class MovingPlatform : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         canMove = true;
+        other.transform.parent = gameObject.transform;
     }
 
     private void OnTriggerExit(Collider other)
     {
         canMove = false;
+        other.transform.parent = null;
     }
 }
