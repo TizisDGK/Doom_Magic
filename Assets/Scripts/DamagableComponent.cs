@@ -49,47 +49,4 @@ public class DamagableComponent : MonoBehaviour
     {
         EnemyManager.UnregisterEnemy(this);
     }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("Heal"))
-        {
-            currentHp += 20;
-            Destroy(other.gameObject);
-            if (currentHp > hp)
-                currentHp = hp;
-            Debug.Log($"{currentHp} current HP");
-        }
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Lava"))
-        {
-            StartCoroutine("ContiniousDamage");
-        }
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Lava"))
-        {
-            StopCoroutine("ContiniousDamage");
-        }
-    }
-
-    IEnumerator ContiniousDamage()
-    {
-        while (true)
-        {            
-            yield return new WaitForSeconds(1); 
-            currentHp -= 10; 
-            if (currentHp <= 0)
-            {
-                StopCoroutine("ContiniousDamage");
-                Die();
-            }
-            Debug.Log($"{currentHp} current HP");
-        }
-    }
 }
