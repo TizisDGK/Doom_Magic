@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 3969318142794821763}
   - component: {fileID: 3969318142794821788}
   - component: {fileID: 3969318142794821789}
+  - component: {fileID: 7205333246645092809}
+  - component: {fileID: 6742702197793684058}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -112,6 +114,38 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hp: 100
   countHp: {fileID: 0}
+--- !u!114 &7205333246645092809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3969318142794821790}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38b7fc4ada1094f21878e7a8ad84cc3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 10
+  speedUp: 0
+--- !u!143 &6742702197793684058
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3969318142794821790}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 1
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7813652406626045647
 GameObject:
   m_ObjectHideFlags: 0
