@@ -39,15 +39,20 @@ public class MovingPlatform : MonoBehaviour
         transform.position = Vector3.MoveTowards(transform.position, points[i].position, moveSpeed * Time.fixedDeltaTime);
     }
 
-    private void OnTriggerEnter(Collider other)
+    void OnCharacterStay(PlayerController controller)
     {
-        canMove = true;
-        other.transform.parent = gameObject.transform;
+        print($"Elevator Player Stay: {controller.name}");
     }
 
-    private void OnTriggerExit(Collider other)
+    void OnCharacterExit(PlayerController controller)
     {
         canMove = false;
-        other.transform.parent = null;
+        controller.transform.parent = null;
+    }
+
+    void OnCharacterEnter(PlayerController controller)
+    {
+        canMove = true;
+        controller.transform.parent = gameObject.transform;
     }
 }

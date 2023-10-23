@@ -756,7 +756,6 @@ GameObject:
   - component: {fileID: 1224558409}
   - component: {fileID: 1224558408}
   - component: {fileID: 1224558412}
-  - component: {fileID: 1224558413}
   m_Layer: 0
   m_Name: Platform
   m_TagString: Untagged
@@ -857,19 +856,6 @@ MonoBehaviour:
   - {fileID: 723844987}
   - {fileID: 289235023}
   - {fileID: 1816296935}
---- !u!65 &1224558413
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1224558407}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1.0000001}
-  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &1535171290
 GameObject:
   m_ObjectHideFlags: 0

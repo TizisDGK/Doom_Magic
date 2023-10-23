@@ -8,22 +8,6 @@ public class Lava : MonoBehaviour
     [SerializeField] int damageAmount = 10;
     // Start is called before the first frame update
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.GetComponent<CharacterController>())
-        {
-            StartCoroutine(damageRoutine = ContiniousDamage(other.gameObject.GetComponent<DamagableComponent>()));
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.GetComponent<CharacterController>())
-        {
-            StopCoroutine(damageRoutine);
-        }
-    }
-
     IEnumerator ContiniousDamage(DamagableComponent damagableComponent)
     {
         while (true)
@@ -41,11 +25,11 @@ public class Lava : MonoBehaviour
 
     void OnCharacterExit()
     {
-        print("Lava Player Exit");
+        StopCoroutine(damageRoutine);
     }
 
-    void OnCharacterEnter()
+    void OnCharacterEnter(PlayerController controller)
     {
-        print("Lava Player Enter");
+        StartCoroutine(damageRoutine = ContiniousDamage(controller.gameObject.GetComponent<DamagableComponent>()));
     }
 }
