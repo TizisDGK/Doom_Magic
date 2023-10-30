@@ -1,10 +1,19 @@
+using System;
 using UnityEngine;
 using UnityEngine.AI;
+
+public enum MoveToCompletedReason
+{
+    Success,
+    Failure,
+    Aborted
+}
 
 public class AIController : BaseCharacterController
 {
     bool isMoveToCompleted = true;
     int pathPointIndex;
+    Action<MoveToCompletedReason> moveToCompleted;
 
     NavMeshPath path;
 
@@ -15,14 +24,21 @@ public class AIController : BaseCharacterController
         path = new NavMeshPath();
     }
 
-    protected bool MoveTo(Vector3 targetPos)
+    public bool MoveTo(Vector3 targetPos, Action<MoveToCompletedReason> completed = null)
     {
+        InvokeMoveToCompleted(MoveToCompletedReason.Aborted);
+
+        moveToCompleted = completed;
+
         bool hasPath = NavMesh.CalculatePath(transform.position, targetPos, NavMesh.AllAreas, path);
 
         if(hasPath)
             pathPointIndex = 1;
 
         isMoveToCompleted = !hasPath;
+
+        if (!hasPath)
+            InvokeMoveToCompleted(MoveToCompletedReason.Failure);
 
         return hasPath;
     }
@@ -48,8 +64,7 @@ public class AIController : BaseCharacterController
         {
             if(pathPointIndex + 1 >= path.corners.Length)
             {
-                print("La");
-                isMoveToCompleted = true;
+                InvokeMoveToCompleted(MoveToCompletedReason.Success);
                 return;
             }
             pathPointIndex++;
@@ -60,6 +75,15 @@ public class AIController : BaseCharacterController
         Vector3 direction = (targetPos - sourcePos).normalized;
 
         MoveWorld(direction.x, direction.z);
-
     }
+
+    void InvokeMoveToCompleted(MoveToCompletedReason reason)
+    {
+        isMoveToCompleted = true;
+
+        Action<MoveToCompletedReason> action = moveToCompleted;
+        moveToCompleted = null;
+        action?.Invoke(reason);
+    }
+
 }

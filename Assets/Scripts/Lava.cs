@@ -18,11 +18,6 @@ public class Lava : MonoBehaviour
         }
     }
 
-    void OnCharacterStay(PlayerController controller)
-    {
-        print($"Lava Player Stay: {controller.name}" );
-    }
-
     void OnCharacterExit()
     {
         StopCoroutine(damageRoutine);

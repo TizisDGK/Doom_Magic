@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BillBoard : MonoBehaviour
+public class Billboard : MonoBehaviour
 {
     Transform cashedCamera;
     // Start is called before the first frame update

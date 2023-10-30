@@ -39,10 +39,6 @@ public class MovingPlatform : MonoBehaviour
         transform.position = Vector3.MoveTowards(transform.position, points[i].position, moveSpeed * Time.fixedDeltaTime);
     }
 
-    void OnCharacterStay(PlayerController controller)
-    {
-        print($"Elevator Player Stay: {controller.name}");
-    }
 
     void OnCharacterExit(PlayerController controller)
     {
