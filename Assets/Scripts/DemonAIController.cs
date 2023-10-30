@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class DemonAIController : AIController
 {
-    protected override void Update()
-    {
-        base.Update();
+    AIStateMachine stateMachine;
 
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            MoveTo(FindObjectOfType<PlayerController>().transform.position);
-        }
+    private void Start()
+    {
+        stateMachine = new AIStateMachine();
+
+        stateMachine.AddState("Roaming", new RoamingAIState(this, stateMachine));
+                                                    //передали сами себя
+        stateMachine.SetActiveState("Roaming");
+
     }
 }
