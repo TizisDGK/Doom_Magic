@@ -231,6 +231,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: 100
+  affilation: 1
 --- !u!114 &8257183847551213664
 MonoBehaviour:
   m_ObjectHideFlags: 0

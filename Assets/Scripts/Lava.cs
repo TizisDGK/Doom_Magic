@@ -14,7 +14,7 @@ public class Lava : MonoBehaviour
         {
             yield return new WaitForSeconds(1);
             damagableComponent.Hp -= damageAmount;
-            Debug.Log($"{damagableComponent.Hp} current HP");
+            Debug.Log($"{damagableComponent.gameObject.name} {damagableComponent.Hp} current HP");
         }
     }
 
@@ -23,7 +23,7 @@ public class Lava : MonoBehaviour
         StopCoroutine(damageRoutine);
     }
 
-    void OnCharacterEnter(PlayerController controller)
+    void OnCharacterEnter(BaseCharacterController controller)
     {
         StartCoroutine(damageRoutine = ContiniousDamage(controller.gameObject.GetComponent<DamagableComponent>()));
     }
