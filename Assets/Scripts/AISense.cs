@@ -26,6 +26,7 @@ public class AISense : MonoBehaviour
 
             target = value;
             TargetChanged?.Invoke(target);
+            Debug.Log($"Target changed: {(target == null ? "null" : target.gameObject.name)}");
         }
     }
 

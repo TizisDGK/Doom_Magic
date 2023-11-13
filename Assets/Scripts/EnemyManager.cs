@@ -50,7 +50,7 @@ public static class EnemyManager
 
             if (angle < coneAngle)
             {
-                CapsuleCollider enemyCollider = enemy.GetComponent<CapsuleCollider>();
+                CharacterController enemyCollider = enemy.GetComponent<CharacterController>();
                 Vector3 unitFrac = new Vector3(0, enemyCollider.height / 2);
                 RaycastHit hit;
 
