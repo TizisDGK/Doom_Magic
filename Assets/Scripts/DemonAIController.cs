@@ -11,7 +11,8 @@ public class DemonAIController : AIController
         stateMachine = new AIStateMachine();
 
         stateMachine.AddState("Roaming", new RoamingAIState(this, stateMachine));
-                                                    //передали сами себя
+                                                        //передали сами себя
+        stateMachine.AddState("Chasing", new ChasingAIState(this, stateMachine));
         stateMachine.SetActiveState("Roaming");
 
     }
