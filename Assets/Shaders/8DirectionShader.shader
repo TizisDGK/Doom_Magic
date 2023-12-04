@@ -6,7 +6,11 @@ Shader "Unlit/8DirectionDoomShader"
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
+        Tags 
+        { 
+            "RenderType"      = "Transparent" 
+            "DisableBatching" = "True"
+        }
         LOD 100
         Cull off
 
@@ -33,13 +37,13 @@ Shader "Unlit/8DirectionDoomShader"
                 UNITY_FOG_COORDS(1)
                 float4 vertex : SV_POSITION;
                 float3 normal : NORMAL;
-                float2 cameraDir : TEXCOORD1;
+                float angle : TEXCOORD1;
             };
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
 
-            //https://docs.unity3d.com/Packages/com.unity.shadergraph@6.9/manual/Rotate-About-Axis-Node.html
+            // https://docs.unity3d.com/Packages/com.unity.shadergraph@6.9/manual/Rotate-About-Axis-Node.html
             void Unity_RotateAboutAxis_Radians_float(float3 In, float3 Axis, float Rotation, out float3 Out)
             {
                 float s = sin(Rotation);
@@ -68,7 +72,6 @@ Shader "Unlit/8DirectionDoomShader"
             v2f vert (appdata v)
             {
                 v2f o;
-                o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 UNITY_TRANSFER_FOG(o,o.vertex);
                 o.normal = v.normal;
@@ -78,33 +81,36 @@ Shader "Unlit/8DirectionDoomShader"
                 cameraDir.y = 0;
                 float2 cameraDir2D = normalize(cameraDir.xz);
 
-                o.cameraDir = cameraDir2D;
+                float2 vectorForward2D = mul(UNITY_MATRIX_M, float4(0,0,1,0)).xz;
+                
+                float angle = dot(vectorForward2D, cameraDir2D);
+
+                float angleRad = acos(angle);
+
+                float3 crossProduct = cross(
+                    float3(vectorForward2D.x, 0, vectorForward2D.y),
+                    float3(cameraDir.x, 0, cameraDir.y));
+
+                if(dot(crossProduct, float3(0,1,0)) < 0)
+                    angleRad =  -angleRad;
+
+                float angleNormalized = angleRad / 3.1415;
+
+                o.angle = (angleNormalized + 1) / 2;
+
+                float3 newVertex;
+                Unity_RotateAboutAxis_Radians_float(v.vertex, float3(0, 1, 0), angleRad, newVertex);
+
+                o.vertex = UnityObjectToClipPos(newVertex);
 
                 return o;
             }
 
             fixed4 frag (v2f i) : SV_Target
             {
-                float3 norm = mul(UNITY_MATRIX_M, float4(i.normal, 0));
+                float tileAngle = fmod(i.angle - 0.0625, 1);
 
-                float2 vectorForward2D = mul(UNITY_MATRIX_M, float4(0,0,1,0)).xz;
-                
-                float angle = dot(vectorForward2D, i.cameraDir);
-
-                float angleRad = acos(angle);
-
-                float angleNormalized = angleRad / 3.1415;
-
-                float3 crossProduct = cross(
-                    float3(vectorForward2D.x, 0, vectorForward2D.y),
-                    float3(i.cameraDir.x, 0, i.cameraDir.y));
-
-                if(dot(crossProduct, float3(0,1,0)) < 0)
-                    angleNormalized =  -angleNormalized;
-                    
-                float finalAngle = (angleNormalized + 1) / 2;
-
-                float tile = floor(lerp(0, 8, finalAngle));
+                float tile = floor(lerp(0, 8, tileAngle));
                 
                 float2 uv;
                 Unity_Flipbook_float(i.uv, 4, 2, tile, float2(1,1), uv);

@@ -101,10 +101,8 @@ Shader "Unlit/4DirectionDoomShader"
                 
                 if(dot(crossProduct, float3(0,1,0)) < 0)
                     angleNormalized =  -angleNormalized;
-                    
-                float finalAngle = (angleNormalized + 1) / 2;
 
-                float tile = floor(lerp(0, 10, finalAngle));            
+                float tile = floor(lerp(0, 5, angleNormalized));            
                 
                 float2 uv;
                 Unity_Flipbook_float(i.uv, 5, 1, tile, float2(1,1), uv);
