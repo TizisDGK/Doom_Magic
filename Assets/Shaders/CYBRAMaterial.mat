@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: New Material
+  m_Name: CYBRAMaterial
   m_Shader: {fileID: 4800000, guid: 287ef4666d3faf24e9df80e800d9774a, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4

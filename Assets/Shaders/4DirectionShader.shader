@@ -1,4 +1,4 @@
-Shader "Unlit/DoomShader"
+Shader "Unlit/4DirectionDoomShader"
 {
     Properties
     {
@@ -39,7 +39,7 @@ Shader "Unlit/DoomShader"
             sampler2D _MainTex;
             float4 _MainTex_ST;
 
-            //https://docs.unity3d.com/Packages/com.unity.shadergraph@6.9/manual/Rotate-About-Axis-Node.html
+            // https://docs.unity3d.com/Packages/com.unity.shadergraph@6.9/manual/Rotate-About-Axis-Node.html
             void Unity_RotateAboutAxis_Radians_float(float3 In, float3 Axis, float Rotation, out float3 Out)
             {
                 float s = sin(Rotation);
@@ -73,7 +73,7 @@ Shader "Unlit/DoomShader"
                 UNITY_TRANSFER_FOG(o,o.vertex);
                 o.normal = v.normal;
 
-                //https://docs.unity3d.com/Packages/com.unity.shadergraph@6.9/manual/Camera-Node.html
+                // https://docs.unity3d.com/Packages/com.unity.shadergraph@6.9/manual/Camera-Node.html
                 float3 cameraDir = -1 * mul(UNITY_MATRIX_M, transpose(mul(unity_WorldToObject, UNITY_MATRIX_I_V)) [2].xyz);
                 cameraDir.y = 0;
                 float2 cameraDir2D = normalize(cameraDir.xz);
@@ -83,14 +83,12 @@ Shader "Unlit/DoomShader"
                 return o;
             }
 
-
             fixed4 frag (v2f i) : SV_Target
             {
-                // apply fog
                 float3 norm = mul(UNITY_MATRIX_M, float4(i.normal, 0));
 
                 float2 vectorForward2D = mul(UNITY_MATRIX_M, float4(0,0,1,0)).xz;
-
+                
                 float angle = dot(vectorForward2D, i.cameraDir);
 
                 float angleRad = acos(angle);
@@ -100,16 +98,19 @@ Shader "Unlit/DoomShader"
                 float3 crossProduct = cross(
                     float3(vectorForward2D.x, 0, vectorForward2D.y),
                     float3(i.cameraDir.x, 0, i.cameraDir.y));
-
+                
                 if(dot(crossProduct, float3(0,1,0)) < 0)
                     angleNormalized =  -angleNormalized;
                     
                 float finalAngle = (angleNormalized + 1) / 2;
 
-                float tile = floor(lerp(0, 8, finalAngle));
+                float tile = floor(lerp(0, 10, finalAngle));            
                 
                 float2 uv;
-                Unity_Flipbook_float(i.uv, 4, 2, tile, float2(1,1), uv);
+                Unity_Flipbook_float(i.uv, 5, 1, tile, float2(1,1), uv);
+
+                if(dot(crossProduct, float3(0,1,0)) > 0)
+                    uv.x = -uv.x;
 
                 // sample the texture
                 fixed4 color = tex2D(_MainTex, uv);
