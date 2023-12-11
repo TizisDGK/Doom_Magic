@@ -1,9 +1,9 @@
-Shader "Unlit/VikaShader"
+Shader "Billboard/8Directional"
 {
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
-        _SecondTex ("SecondTexture", 2D) = "white" {}
+        //_SecondTex ("SecondTexture", 2D) = "white" {}
     }
     SubShader
     {
@@ -27,6 +27,7 @@ Shader "Unlit/VikaShader"
             #pragma multi_compile_fog 
 
             #include "UnityCG.cginc" //импортирование библиотеки (матрицы там находятся)
+            #include "DoomBillboard.cginc"
             //то что передает непосредственно приложение
             struct appdata
             {
@@ -47,34 +48,6 @@ Shader "Unlit/VikaShader"
             sampler2D _MainTex;
             float4 _MainTex_ST;
 
-            //https://docs.unity3d.com/Packages/com.unity.shadergraph@16.0/manual/Rotate-About-Axis-Node.html 
-            void Unity_RotateAboutAxis_Radians_float(float3 In, float3 Axis, float Rotation, out float3 Out)
-            {
-                float s = sin(Rotation);
-                float c = cos(Rotation);
-                float one_minus_c = 1.0 - c;
-
-                Axis = normalize(Axis);
-                float3x3 rot_mat =
-                {   one_minus_c * Axis.x * Axis.x + c, one_minus_c * Axis.x * Axis.y - Axis.z * s, one_minus_c * Axis.z * Axis.x + Axis.y * s,
-                    one_minus_c * Axis.x * Axis.y + Axis.z * s, one_minus_c * Axis.y * Axis.y + c, one_minus_c * Axis.y * Axis.z - Axis.x * s,
-                    one_minus_c * Axis.z * Axis.x - Axis.y * s, one_minus_c * Axis.y * Axis.z + Axis.x * s, one_minus_c * Axis.z * Axis.z + c
-                };
-                Out = mul(rot_mat,  In);
-            }
-
-            // https://docs.unity3d.com/Packages/com.unity.shadergraph@16.0/manual/Flipbook-Node.html 
-            void Unity_Flipbook_float(float2 UV, float Width, float Height, float Tile, float2 Invert, out float2 Out)
-            {
-                Tile = floor(fmod(Tile + float(0.00001), Width*Height));
-                float2 tileCount = float2(1.0, 1.0) / float2(Width, Height);
-                float base = floor((Tile + float(0.5)) * tileCount.x);
-                float tileX = (Tile - Width * base);
-                float tileY = (Invert.y * Height - (base + Invert.y * 1));
-                Out = (UV + float2(tileX, tileY)) * tileCount;
-            }
-
-
             v2f vert (appdata v)
             {
                 v2f o;
@@ -86,7 +59,8 @@ Shader "Unlit/VikaShader"
                 //https://docs.unity3d.com/Packages/com.unity.shadergraph@16.0/manual/Camera-Node.html 
                 float3 cameraDir = -1 * mul(UNITY_MATRIX_M, transpose(mul(unity_WorldToObject, UNITY_MATRIX_I_V)) [2].xyz);
                 cameraDir.y = 0;
-                float2 cameraDir2D = normalize(cameraDir.xz);
+
+                float2 cameraDir2D = normalize(cameraDir.xz); //мб этой строки не должно быть? не поняла, проверить надо 
 
                 float2 vectorForward2D = mul(UNITY_MATRIX_M, float4(0, 0, 1, 0)).xz;
 
@@ -127,12 +101,12 @@ Shader "Unlit/VikaShader"
 
                 //return abs(i.normal);
                 
-                float tileAngle = fmod(i.angle - 0.0625, 1); //fmod -- это репит
+                float tileAngle = fmod(i.angle + 0.0625, 1); //fmod -- это репит
 
                 float tile = floor(lerp(0, 8, tileAngle));
 
                 float2 uv;
-                Unity_Flipbook_float(i.uv, 4, 2, tile, float2(1, 1), uv);
+                Unity_Flipbook_float(i.uv, 4, 2, tile, float2(0, 1), uv);
 
                 // sample the texture
                 fixed4 color = tex2D(_MainTex, uv); //fixed -- это float с пониженной точностью. на нашем уровне это ни на чт оне влияет

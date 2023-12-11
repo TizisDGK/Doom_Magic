@@ -2,13 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
+[ExecuteAlways]
 public class ProceduralQuard : MonoBehaviour
 {
+    //ExecuteAlways --  означает что методы класса будут исполняться даже в редакторе. Нам нужна чтоб анимация проирывалась в редакторе
+
+
     //Скрипт для процедурного кварда.
     [SerializeField] Material targetMaterial;
     [SerializeField] float width = 1;
     [SerializeField] float height = 1;
+
+    [SerializeField] Texture2D texture;
+
+    private void OnDidApplyAnimationProperties() => Refresh();
 
 #if UNITY_EDITOR
     private void OnValidate() //вызывается каждый раз когда меняется свойство объекта. Существует в редакторе но не в рантайме.Поэтому в решетки завернули
@@ -50,8 +57,8 @@ public class ProceduralQuard : MonoBehaviour
 
         int[] triangles = new int[6] //формируем треугольник
         {
-            0, 2, 1,
-            1, 0, 2
+            2, 3, 1,
+            0, 2, 1
         };
 
         mesh.triangles = triangles;
@@ -82,5 +89,11 @@ public class ProceduralQuard : MonoBehaviour
 
         //кижаем материал
         meshRenderer.material = targetMaterial;
+
+        if(Application.isPlaying)
+            meshRenderer.material.SetTexture("_MainTex", texture);
+        else
+            meshRenderer.sharedMaterial.SetTexture("_MainTex", texture);
+
     }
 }
