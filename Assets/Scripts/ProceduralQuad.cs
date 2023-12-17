@@ -1,12 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+[ExecuteAlways]
 public class ProceduralQuad : MonoBehaviour
 {
     [SerializeField] Material targetMaterial;
     [SerializeField] float width = 1;
     [SerializeField] float height = 1;
+    [SerializeField] Texture2D texture;
+
+    private void OnDidApplyAnimationProperties() => Refresh();
 
 #if UNITY_EDITOR
     private void OnValidate() => Refresh();
@@ -66,5 +68,10 @@ public class ProceduralQuad : MonoBehaviour
 
         meshFilter.mesh = mesh;
         meshRenderer.material = targetMaterial;
+
+        if(Application.isPlaying)
+            meshRenderer.material.SetTexture("_MainTex", texture);
+        else
+            meshRenderer.sharedMaterial.SetTexture("_MainTex", texture);
     }
 }
