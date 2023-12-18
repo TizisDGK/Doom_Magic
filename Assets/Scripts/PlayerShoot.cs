@@ -6,8 +6,6 @@ public class PlayerShoot : MonoBehaviour
 {
     [SerializeField] UIAim aim;
 
-    // Update is called once per frame
-
     void Update()
     {
         DamagableComponent damagable 

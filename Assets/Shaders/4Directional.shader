@@ -6,7 +6,11 @@ Shader "Billboard/4Directional"
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
+        Tags 
+        { 
+            "RenderType"      = "Transparent" 
+            "DisableBatching" = "True"
+        }
         LOD 100
         Cull off
 
@@ -19,6 +23,7 @@ Shader "Billboard/4Directional"
             #pragma multi_compile_fog
 
             #include "UnityCG.cginc"
+            #include "DoomBillboard.cginc"
 
             struct appdata
             {
@@ -38,32 +43,6 @@ Shader "Billboard/4Directional"
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
-
-            // https://docs.unity3d.com/Packages/com.unity.shadergraph@6.9/manual/Rotate-About-Axis-Node.html
-            void Unity_RotateAboutAxis_Radians_float(float3 In, float3 Axis, float Rotation, out float3 Out)
-            {
-                float s = sin(Rotation);
-                float c = cos(Rotation);
-                float one_minus_c = 1.0 - c;
-
-                Axis = normalize(Axis);
-                float3x3 rot_mat = 
-                {   one_minus_c * Axis.x * Axis.x + c, one_minus_c * Axis.x * Axis.y - Axis.z * s, one_minus_c * Axis.z * Axis.x + Axis.y * s,
-                    one_minus_c * Axis.x * Axis.y + Axis.z * s, one_minus_c * Axis.y * Axis.y + c, one_minus_c * Axis.y * Axis.z - Axis.x * s,
-                    one_minus_c * Axis.z * Axis.x - Axis.y * s, one_minus_c * Axis.y * Axis.z + Axis.x * s, one_minus_c * Axis.z * Axis.z + c
-                };
-                Out = mul(rot_mat,  In);
-            }
-
-            // https://docs.unity3d.com/Packages/com.unity.shadergraph@6.9/manual/Flipbook-Node.html
-            void Unity_Flipbook_float(float2 UV, float Width, float Height, float Tile, float2 Invert, out float2 Out)
-            {
-                Tile = fmod(Tile, Width * Height);
-                float2 tileCount = float2(1.0, 1.0) / float2(Width, Height);
-                float tileY = abs(Invert.y * Height - (floor(Tile * tileCount.x) + Invert.y * 1));
-                float tileX = abs(Invert.x * Width - ((Tile - Width * floor(Tile * tileCount.x)) + Invert.x * 1));
-                Out = (UV + float2(tileX, tileY)) * tileCount;
-            }
 
             v2f vert (appdata v)
             {
@@ -105,7 +84,7 @@ Shader "Billboard/4Directional"
                 float tile = floor(lerp(0, 5, angleNormalized));            
                 
                 float2 uv;
-                Unity_Flipbook_float(i.uv, 5, 1, tile, float2(1,1), uv);
+                Unity_Flipbook_float(i.uv, 5, 1, tile, float2(0,1), uv);
 
                 if(dot(crossProduct, float3(0,1,0)) > 0)
                     uv.x = -uv.x;

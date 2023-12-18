@@ -6,7 +6,6 @@ public class Lava : MonoBehaviour
 {
     IEnumerator damageRoutine;
     [SerializeField] int damageAmount = 10;
-    // Start is called before the first frame update
 
     IEnumerator ContiniousDamage(DamagableComponent damagableComponent)
     {
