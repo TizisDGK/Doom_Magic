@@ -5,11 +5,10 @@ using UnityEngine;
 public class HealingItem : MonoBehaviour
 {
     [SerializeField] int heal = 20;
-    DamagableComponent damagableComponent;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.TryGetComponent<DamagableComponent>(out DamagableComponent hinge))
+        if (other.gameObject.TryGetComponent<DamagableComponent>(out DamagableComponent damagableComponent))
         {
             damagableComponent = other.gameObject.GetComponent<DamagableComponent>();
             damagableComponent.Hp += heal;
